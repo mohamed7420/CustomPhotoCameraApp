@@ -8,13 +8,51 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController , UINavigationControllerDelegate{
 
+    @IBOutlet weak var imageView: UIImageView!
+    
+    @IBOutlet weak var buttonCapture: UIButton!
+    
+    let imagePicker = UIImagePickerController()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+       
+        
+        imagePicker.delegate = self
+        
+    }
+    
+    override func viewDidLayoutSubviews() {
+        
+        super.viewDidLayoutSubviews()
+        
+       buttonCapture.layer.cornerRadius = buttonCapture.frame.height / 2
+        
     }
 
 
+    @IBAction func btn_capture(_ sender: Any) {
+        
+        imagePicker.sourceType = .photoLibrary
+//        imagePicker.allowsEditing = true
+        
+        self.present(imagePicker, animated: true, completion: nil)
+    }
+}
+
+extension ViewController :UIImagePickerControllerDelegate{
+    
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+        
+        if let pickerImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage{
+            
+            imageView.image = pickerImage
+        }
+        
+        dismiss(animated: true, completion: nil)
+    }
 }
 
